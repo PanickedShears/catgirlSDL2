@@ -46,9 +46,9 @@ Mix_Chunk* s00 = NULL; // text sfx
 int scene = 0;                      // selects what the screen mainly shows
 int subscene = 0;                   // helps with smaller elements
 int chatId = 0;                     // probably used to define which chat is happening
-std::string chatChara = "???";      // the character name of the chat
-std::string chatContents = "???";   // the message the character is saying
-std::string displayedChat = "null displayedchat";          // the displayed chat on the screen. assign scrolling letters to this variable.
+std::string chatChara;              // the character name of the chat
+std::string chatContents;           // the message the character is saying
+std::string displayedChat;          // the displayed chat on the screen. assign scrolling letters to this variable.
 bool chatWait = false;              // defines whether or not to wait for user input
 
 // game variables
@@ -105,18 +105,16 @@ static void drawTextBox()
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
     SDL_RenderFillRect(ren, &cb1);
 
-    // prep the surfaces and textures
-    SDL_Surface* cnsfc = TTF_RenderText_Solid(mainFont, "abc", white);
-    SDL_Surface* ctsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(displayedChat.c_str()), white);
+    // order is hella important i guess
+    SDL_Surface* cnsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(chatChara.c_str()), white);
     SDL_Texture* cntxt = SDL_CreateTextureFromSurface(ren, cnsfc);
-    SDL_Texture* cttxt = SDL_CreateTextureFromSurface(ren, ctsfc);
-
-    // draw them?
-    SDL_Rect ctrect = { 20, 380, tw, th };
-    SDL_Rect ccrect = { 20, 410, tw, th };
     SDL_QueryTexture(cntxt, NULL, NULL, &tw, &th);
+    SDL_Rect ctrect = { 20, 380, tw, th };
     SDL_RenderCopy(ren, cntxt, NULL, &ctrect);
+    SDL_Surface* ctsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(displayedChat.c_str()), white);
+    SDL_Texture* cttxt = SDL_CreateTextureFromSurface(ren, ctsfc);
     SDL_QueryTexture(cttxt, NULL, NULL, &tw, &th);
+    SDL_Rect ccrect = { 20, 410, tw, th };
     SDL_RenderCopy(ren, cttxt, NULL, &ccrect);
 
     // cleanup
