@@ -6,7 +6,6 @@
 // i know how to make it not use half your cpu, so
 // if it ain't broke, dont fix it
 
-/*
 
 #include "catgirl.h"
 #include <SDL.h>
@@ -354,5 +353,3 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 
 	return 0;
 }
-
-*/

@@ -1,10 +1,12 @@
+#define SDL_MAIN_HANDLED
+
 #include <SDL.h>
 #include <stdio.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include "catgirl.h"
 
-#define SPLASH_SCREEN_DELAY 500
+const int SPLASH_SCREEN_DELAY = 500;
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -30,6 +32,7 @@ bool loadMedia()
 	return success;
 }
 
+
 int main(int argc, char* args[])
 {
 	//Initialize SDL
@@ -47,6 +50,7 @@ int main(int argc, char* args[])
 		}
 		else
 		{
+			printf("load media...");
 			loadMedia();
 			screenSurface = SDL_GetWindowSurface(window);
 
@@ -65,7 +69,7 @@ int main(int argc, char* args[])
 
 			// starts the rest of the game
 			printf("start main game...\n");
-			//catgirl_start(window, screenSurface);
+			catgirl_start(window, screenSurface);
 		}
 	}
 
@@ -75,8 +79,8 @@ int main(int argc, char* args[])
 	return 0;
 }
 
-// int main()
-// {
-// 	printf("Hello World!\n");
-// 	return 0;
-// }
+//int main()
+//{
+//	printf("Hello World!\n");
+//	return 0;
+//}
