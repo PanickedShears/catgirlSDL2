@@ -1,4 +1,4 @@
-// THIS GAME IS SEVERELY UNOPTIMIZED!
+﻿// THIS GAME IS SEVERELY UNOPTIMIZED!
 // 
 // i do not care to learn cpp well
 // enough to make this "optimized"
@@ -13,6 +13,9 @@
 #include "init_sgm.h"
 #include <SDL_mixer.h>
 #include <iostream>
+// Scene headers
+#include "scene_intro.h"
+#include "discordintegration.h"
 
 
 // important SDL variables
@@ -38,14 +41,14 @@ SDL_Surface* statsLoveTextSfc = NULL;
 SDL_Texture* statsLoveTextTx = NULL;
 
 // music/sfx
-Mix_Music* m01 = NULL; // 
+Mix_Music* m01 = NULL; // adoption
 Mix_Chunk* s00 = NULL; // text sfx
 
 // variables for scenes and chats 
 // and stuff (optimize later)
 int scene = 0;                      // selects what the screen mainly shows
 int subscene = 0;                   // helps with smaller elements
-int chatId = 0;                     // probably used to define which chat is happening
+int chatId = 1;                     // probably used to define which chat is happening
 std::string chatChara;              // the character name of the chat
 std::string chatContents;           // the message the character is saying
 std::string displayedChat;          // the displayed chat on the screen. assign scrolling letters to this variable.
@@ -57,6 +60,18 @@ int hap = 100, hun = 25, love = 1;
 char gameTitle[] = "cat.girl v1.0";
 char currName = NULL;
 char* loaded_name = NULL;
+std::string pres_str = "?? ?? ??";
+int framecounter = 0;
+
+
+void mousePress(SDL_MouseButtonEvent& b)
+{
+    if (b.button == SDL_BUTTON_LEFT)
+    {
+        chatWait = false;
+        SDL_Delay(32.222f);
+    }
+}
 
 
 static void catgirl_cleanup()
@@ -90,7 +105,7 @@ static void prepIntro()
 {
     chatChara = "null chatchara";
     chatContents = "null chatcontents";
-    displayedChat = "null displayedchat";
+    displayedChat = "";
 }
 
 static void drawTextBox()
@@ -109,12 +124,12 @@ static void drawTextBox()
     SDL_Surface* cnsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(chatChara.c_str()), white);
     SDL_Texture* cntxt = SDL_CreateTextureFromSurface(ren, cnsfc);
     SDL_QueryTexture(cntxt, NULL, NULL, &tw, &th);
-    SDL_Rect ctrect = { 20, 380, tw, th };
+    SDL_Rect ctrect = { 10, 340, tw, th };
     SDL_RenderCopy(ren, cntxt, NULL, &ctrect);
     SDL_Surface* ctsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(displayedChat.c_str()), white);
     SDL_Texture* cttxt = SDL_CreateTextureFromSurface(ren, ctsfc);
     SDL_QueryTexture(cttxt, NULL, NULL, &tw, &th);
-    SDL_Rect ccrect = { 20, 410, tw, th };
+    SDL_Rect ccrect = { 20, 380, tw, th };
     SDL_RenderCopy(ren, cttxt, NULL, &ccrect);
 
     // cleanup
@@ -231,7 +246,8 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
     TTF_Init();
     loadMedia();
     prepBaseTexts();
-
+    //discord
+    updatePres("cat.girl 1.0", "Loading...");
 
     // scan for the savegame, if its there, skip the begin phase
     if (!scanForSavegame())
@@ -271,7 +287,9 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         SDL_RenderFillRect(ren, &fs);
                         SDL_RenderPresent(ren);
                         prepIntro();
+                        chatWait = false;
                         SDL_Delay(750);
+                        scene = 1;
                         break;
                     }
                 }
@@ -302,6 +320,10 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                     break;
                 }
             }
+            else if (e.type == SDL_MOUSEBUTTONDOWN)
+            {
+                mousePress(e.button);
+            }
         }
 
         Uint64 start = SDL_GetPerformanceCounter();
@@ -309,13 +331,21 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
         switch (scene)
         {
             case 0:
-                printf("Savegame fail!!\n");
+                printf("Savegame scene issue? Not aborting...\n");
                 break;
             case 1:
+                if (framecounter == 0) {
+                    updatePres("At Home", const_cast<char*>(pres_str.c_str()));
+                    framecounter = 1800;
+                }
+                else
+                {
+                    framecounter--;
+                }
                 drawGUIbase();
                 drawBaseText();
                 break;
-            case 2:
+            case 2: // intro
                 if (Mix_PlayingMusic() == 0)
                 {
                     // play music if no other music is playing.
@@ -328,7 +358,49 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                             Mix_VolumeMusic(i);
                             SDL_Delay(16.666f);
                         }
+                        updatePres("At the Adoption Center", "Picking a catgirl...");
                         first = false;
+                    }
+                }
+
+                if (!chatWait)
+                {
+                    if (chatId != 15)
+                    {
+                        chatContents = EN_getNextString(chatId);
+                        chatChara = EN_getNextChara(chatId);
+                        chatId++;
+
+                        displayedChat = "";
+                        for (int i = 0; i < chatContents.size(); i++)
+                        {
+                            displayedChat += chatContents[i];
+                            Mix_PlayChannel(-1, s00, 0);
+                            drawTextBox();
+
+                            SDL_Delay(32.222f); // limit to ~30fps
+
+                            SDL_RenderPresent(ren); // important, wont show unless this is here
+                            SDL_RenderClear(ren);
+                        }
+                        chatWait = true;
+                    }
+                    else
+                    {
+                        for (int i = 100; i > 0; i--)
+                        {
+                            Mix_VolumeMusic(i);
+                            SDL_Delay(16.666f);
+                        }
+                        Mix_HaltMusic();
+                        Mix_VolumeMusic(100);
+                        scene = 1;
+                        first = false;
+                        SDL_Rect fs = { 0, 0, 640, 480 };
+                        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+                        SDL_RenderFillRect(ren, &fs);
+                        SDL_RenderPresent(ren);
+                        SDL_Delay(750);
                     }
                 }
                 drawTextBox();
@@ -349,6 +421,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 
         // Cap to 60 FPS
         //printf("%f", 16.666f - elapsedMS);
+        runcbs(); // discord game sdk
         SDL_Delay(floor(16.666f - elapsedMS));
 	}
 

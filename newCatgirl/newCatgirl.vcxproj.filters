@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\discordGameSDK">
+      <UniqueIdentifier>{aeaa1065-65d2-4392-9696-90ced6252a33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="catgirl.cpp">
@@ -27,6 +30,51 @@
     <ClCompile Include="source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="discordintegration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\achievement_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\activity_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\application_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\core.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\image_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\lobby_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\network_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\overlay_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\relationship_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\storage_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\store_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\types.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\user_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\voice_manager.cpp">
+      <Filter>Source Files\discordGameSDK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catgirl.h">
@@ -36,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="scene_intro.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discordintegration.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

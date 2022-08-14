@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\_newCodesies\_FORPATH\SDL2_mixer-2.6.1\include;D:\_newCodesies\_FORPATH\SDL2_ttf-2.0.18\include;D:\_newCodesies\_FORPATH\SDL2-VC\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\_FORPATH\SDL2_mixer-2.6.1\lib\x64;C:\_FORPATH\SDL2_ttf-2.0.18\lib\x64;C:\_FORPATH\SDL2-VC\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\_newCodesies\_FORPATH\SDL2_mixer-2.6.1\include;D:\_newCodesies\_FORPATH\SDL2_ttf-2.0.18\include;D:\_newCodesies\_FORPATH\SDL2-VC\include;D:\_newCodesies\_FORPATH\discord_game_sdk\cpp;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\_FORPATH\SDL2_mixer-2.6.1\lib\x64;C:\_FORPATH\SDL2_ttf-2.0.18\lib\x64;"D:\_newCodesies\_FORPATH\discord_game_sdk\lib\x86_64\";C:\_FORPATH\SDL2-VC\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;SDL2_ttf.lib;discord_game_sdk.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,13 +132,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\achievement_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\activity_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\application_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\core.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\image_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\lobby_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\network_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\overlay_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\relationship_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\storage_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\store_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\types.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\user_manager.cpp" />
+    <ClCompile Include="..\..\_FORPATH\discord_game_sdk\cpp\voice_manager.cpp" />
     <ClCompile Include="catgirl.cpp" />
+    <ClCompile Include="discordintegration.cpp" />
     <ClCompile Include="init_sgm.cpp" />
     <ClCompile Include="scene_intro.cpp" />
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catgirl.h" />
+    <ClInclude Include="discordintegration.h" />
     <ClInclude Include="init_sgm.h" />
     <ClInclude Include="scene_intro.h" />
   </ItemGroup>
