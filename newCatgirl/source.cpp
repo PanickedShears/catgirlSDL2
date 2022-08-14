@@ -1,5 +1,3 @@
-#define SDL_MAIN_HANDLED
-
 #include <SDL.h>
 #include <stdio.h>
 #include <SDL_ttf.h>
@@ -32,9 +30,9 @@ bool loadMedia()
 	return success;
 }
 
-
 int main(int argc, char* args[])
 {
+	printf("main reached\n");
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -50,7 +48,6 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			printf("load media...");
 			loadMedia();
 			screenSurface = SDL_GetWindowSurface(window);
 
@@ -78,9 +75,3 @@ int main(int argc, char* args[])
 
 	return 0;
 }
-
-//int main()
-//{
-//	printf("Hello World!\n");
-//	return 0;
-//}

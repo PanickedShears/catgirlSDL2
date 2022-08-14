@@ -6,7 +6,6 @@
 // i know how to make it not use half your cpu, so
 // if it ain't broke, dont fix it
 
-
 #include "catgirl.h"
 #include <SDL.h>
 #include <stdio.h>
@@ -14,6 +13,7 @@
 #include "init_sgm.h"
 #include <SDL_mixer.h>
 #include <iostream>
+
 
 // important SDL variables
 SDL_Window* win = NULL;
@@ -41,13 +41,14 @@ SDL_Texture* statsLoveTextTx = NULL;
 Mix_Music* m01 = NULL; // 
 Mix_Chunk* s00 = NULL; // text sfx
 
-// variables for scenes and chats and stuff (optimize later)
+// variables for scenes and chats 
+// and stuff (optimize later)
 int scene = 0;                      // selects what the screen mainly shows
 int subscene = 0;                   // helps with smaller elements
 int chatId = 0;                     // probably used to define which chat is happening
-std::string chatChara = NULL;       // the character name of the chat
-std::string chatContents = NULL;    // the message the character is saying
-std::string displayedChat = NULL;   // the displayed chat on the screen. assign scrolling letters to this variable.
+std::string chatChara = "???";      // the character name of the chat
+std::string chatContents = "???";   // the message the character is saying
+std::string displayedChat = "null displayedchat";          // the displayed chat on the screen. assign scrolling letters to this variable.
 bool chatWait = false;              // defines whether or not to wait for user input
 
 // game variables
@@ -87,38 +88,40 @@ static void catgirl_cleanup()
 
 static void prepIntro()
 {
-    chatChara = "???";
-    chatContents = "???";
-    displayedChat = "";
+    chatChara = "null chatchara";
+    chatContents = "null chatcontents";
+    displayedChat = "null displayedchat";
 }
 
 static void drawTextBox()
 {
-    SDL_Rect cb0 = { 10,370,100,620 };
-    SDL_Rect cb1 = { 15,375,90,610 };
+    // set up variables and draw base
+    SDL_Rect cb0 = { 10,370,620,100 };
+    SDL_Rect cb1 = { 15,375,610,90 };
+    int tw = 0, th = 0;
+    SDL_Color white = { 255, 255, 255 };
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
     SDL_RenderFillRect(ren, &cb0);
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
     SDL_RenderFillRect(ren, &cb1);
 
-    // draw the chara name
-    SDL_Color white = { 255, 255, 255 };
-    SDL_Surface* cnsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(chatChara.c_str()), white);
+    // prep the surfaces and textures
+    SDL_Surface* cnsfc = TTF_RenderText_Solid(mainFont, "abc", white);
+    SDL_Surface* ctsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(displayedChat.c_str()), white);
     SDL_Texture* cntxt = SDL_CreateTextureFromSurface(ren, cnsfc);
-    SDL_Rect ctrect = { 20, 380, 0, 0 };
-    SDL_QueryTexture(cntxt, NULL, NULL, 0, 0);
+    SDL_Texture* cttxt = SDL_CreateTextureFromSurface(ren, ctsfc);
+
+    // draw them?
+    SDL_Rect ctrect = { 20, 380, tw, th };
+    SDL_Rect ccrect = { 20, 410, tw, th };
+    SDL_QueryTexture(cntxt, NULL, NULL, &tw, &th);
     SDL_RenderCopy(ren, cntxt, NULL, &ctrect);
-    // cleanup, free memory
+    SDL_QueryTexture(cttxt, NULL, NULL, &tw, &th);
+    SDL_RenderCopy(ren, cttxt, NULL, &ccrect);
+
+    // cleanup
     SDL_DestroyTexture(cntxt);
     SDL_FreeSurface(cnsfc);
-    
-    // draw the tb contents
-    SDL_Surface* ctsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(chatContents.c_str()), white);
-    SDL_Texture* cttxt = SDL_CreateTextureFromSurface(ren, ctsfc);
-    SDL_Rect ccrect = { 20, 410, 0, 0 };
-    SDL_QueryTexture(cttxt, NULL, NULL, 0, 0);
-    SDL_RenderCopy(ren, cttxt, NULL, &ccrect);
-    // cleanup, free memory
     SDL_DestroyTexture(cttxt);
     SDL_FreeSurface(ctsfc);
 }
@@ -218,6 +221,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
     {
         printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return -1;
     }
 
     bool first = true; // used for music fading
@@ -268,7 +272,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
                         SDL_RenderFillRect(ren, &fs);
                         SDL_RenderPresent(ren);
-                        //prepIntro();
+                        prepIntro();
                         SDL_Delay(750);
                         break;
                     }
@@ -329,15 +333,16 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         first = false;
                     }
                 }
-                chatChara = "TestCb";
-                chatContents = "This is a test.";
+                drawTextBox();
                 break;
             default:
                 printf("SCENE INVALID!\n");
                 end = true;
         }
 
+        
         SDL_RenderPresent(ren); // very important lol
+        SDL_RenderClear(ren);
 
         Uint64 end = SDL_GetPerformanceCounter();
 
