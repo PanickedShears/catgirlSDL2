@@ -368,7 +368,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 
                 if (!chatWait)
                 {
-                    if (chatId != 15)
+                    if (chatId != 16)
                     {
                         chatContents = EN_getNextString(chatId);
                         chatChara = EN_getNextChara(chatId);
