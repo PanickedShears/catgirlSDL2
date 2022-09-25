@@ -96,10 +96,10 @@ string EN_getNextChara(int chId)
 		ret = "You";
 		break;
 	case 12:
-		ret = "Catgirl Adoption Center Worker";
+		ret = " ";
 		break;
 	case 13:
-		ret = " ";
+		ret = "Catgirl Adoption Center Worker";
 		break;
 	case 14:
 		ret = "Catgirl Adoption Center Worker";

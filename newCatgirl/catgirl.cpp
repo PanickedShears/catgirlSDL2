@@ -59,7 +59,7 @@ bool chatWait = false;              // defines whether or not to wait for user i
 bool end = false;
 int hap = 100, hun = 25, love = 1;
 char gameTitle[] = "cat.girl v1.0";
-char currName = NULL;
+const char* currName = "Chloe";
 char* loaded_name = NULL;
 std::string pres_str = "Loading...";
 std::ostringstream pres_strstm;
@@ -170,7 +170,7 @@ static void prepBaseTexts()
 {
     // top text (catgirl name maybe?)
     SDL_Color white = { 255, 255, 255 };
-    titleTextSfc = TTF_RenderText_Solid(mainFont, &currName, white);
+    titleTextSfc = TTF_RenderText_Solid(mainFont, currName, white);
     titleTextTx = SDL_CreateTextureFromSurface(ren, titleTextSfc);
     // stats texts
     statsHapTextSfc = TTF_RenderText_Solid(mainFontSm, "HAPPINESS", white);
@@ -404,6 +404,25 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         SDL_RenderFillRect(ren, &fs);
                         SDL_RenderPresent(ren);
                         SDL_Delay(750);
+
+                        // save game
+                        saveGame(hap, hun, love, 2, 0);
+                        displayedChat = "";
+                        chatContents = "The game has been saved.";
+                        chatChara = "cat.girl";
+                        for (int i = 0; i < chatContents.size(); i++)
+                        {
+                            displayedChat += chatContents[i];
+                            Mix_PlayChannel(-1, s00, 0);
+                            drawTextBox();
+
+                            SDL_Delay(32.222f); // limit to ~30fps
+
+                            SDL_RenderPresent(ren); // important, wont show unless this is here
+                            SDL_RenderClear(ren);
+                        }
+                        drawTextBox();
+                        SDL_Delay(3000);
                     }
                 }
                 drawTextBox();
