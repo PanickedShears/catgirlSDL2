@@ -105,8 +105,8 @@ static void catgirl_cleanup()
 
 static void prepIntro()
 {
-    chatChara = "null chatchara";
-    chatContents = "null chatcontents";
+    chatChara = "ChatChara_Placeholder";
+    chatContents = "ChatContents_Placeholder";
     displayedChat = "";
 }
 
@@ -245,7 +245,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 
 	ren = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    printf("cat.girl (en-us) (Japan)\n");
+    printf("cat.girl (en-us)\n");
     TTF_Init();
     loadMedia();
     prepBaseTexts();
