@@ -14,6 +14,7 @@
 #include <SDL_mixer.h>
 #include <iostream>
 #include <sstream>
+#include <Windows.h>
 // Scene headers
 #include "scene_intro.h"
 #include "discordintegration.h"
@@ -59,7 +60,7 @@ bool chatWait = false;              // defines whether or not to wait for user i
 bool end = false;
 int hap = 100, hun = 25, love = 1;
 char gameTitle[] = "cat.girl v1.0";
-const char* currName = "Chloe";
+std::string currName = "Chloe";
 char* loaded_name = NULL;
 std::string pres_str = "Loading...";
 std::ostringstream pres_strstm;
@@ -170,7 +171,7 @@ static void prepBaseTexts()
 {
     // top text (catgirl name maybe?)
     SDL_Color white = { 255, 255, 255 };
-    titleTextSfc = TTF_RenderText_Solid(mainFont, currName, white);
+    titleTextSfc = TTF_RenderText_Solid(mainFont, currName.c_str(), white);
     titleTextTx = SDL_CreateTextureFromSurface(ren, titleTextSfc);
     // stats texts
     statsHapTextSfc = TTF_RenderText_Solid(mainFontSm, "HAPPINESS", white);
@@ -233,6 +234,19 @@ static void drawBaseText()
 
 int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 {
+    if (scanForSavegame()) //load savefile
+    {
+        std::stringstream tempss;
+        TCHAR temp[12];
+        LPCTSTR path = ".\\catgirl.sav";
+        GetPrivateProfileString("catgirl", "name", "Chloe", temp, 12, path);
+        currName = std::string(temp);
+
+        hap = GetPrivateProfileIntA("catgirl", "hap", 100, path);
+        hun = GetPrivateProfileIntA("catgirl", "hun", 25, path);
+        love = GetPrivateProfileIntA("catgirl", "love", 1, path);
+    }
+
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
     {
         printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
@@ -301,7 +315,10 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
             SDL_Delay(16.666f);
         }
     }
-    else scene = 1;
+    else
+    {
+        scene = 1;
+    }
 
 
     // ACTUAL game code
@@ -342,7 +359,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
             case 1:
                 if (first)
                 {
-                    updatePres("At Home", gameTitle);
+                    updatePres("At Home", currName.c_str());
                     first = false;
                 }
                 drawGUIbase();
@@ -423,6 +440,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         }
                         drawTextBox();
                         SDL_Delay(3000);
+                        updatePres("Chapter 1", "Chloe");
                     }
                 }
                 drawTextBox();
