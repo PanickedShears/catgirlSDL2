@@ -13,6 +13,7 @@
 #include "init_sgm.h"
 #include <SDL_mixer.h>
 #include <iostream>
+#include <sstream>
 // Scene headers
 #include "scene_intro.h"
 #include "discordintegration.h"
@@ -60,7 +61,8 @@ int hap = 100, hun = 25, love = 1;
 char gameTitle[] = "cat.girl v1.0";
 char currName = NULL;
 char* loaded_name = NULL;
-std::string pres_str = "?? ?? ??";
+std::string pres_str = "Loading...";
+std::ostringstream pres_strstm;
 int framecounter = 0;
 
 
@@ -121,12 +123,12 @@ static void drawTextBox()
     SDL_RenderFillRect(ren, &cb1);
 
     // order is hella important i guess
-    SDL_Surface* cnsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(chatChara.c_str()), white);
+    SDL_Surface* cnsfc = TTF_RenderText_Solid_Wrapped(mainFont, const_cast<char*>(chatChara.c_str()), white, 600);
     SDL_Texture* cntxt = SDL_CreateTextureFromSurface(ren, cnsfc);
     SDL_QueryTexture(cntxt, NULL, NULL, &tw, &th);
     SDL_Rect ctrect = { 10, 340, tw, th };
     SDL_RenderCopy(ren, cntxt, NULL, &ctrect);
-    SDL_Surface* ctsfc = TTF_RenderText_Solid(mainFont, const_cast<char*>(displayedChat.c_str()), white);
+    SDL_Surface* ctsfc = TTF_RenderText_Solid_Wrapped(mainFont, const_cast<char*>(displayedChat.c_str()), white, 600);
     SDL_Texture* cttxt = SDL_CreateTextureFromSurface(ren, ctsfc);
     SDL_QueryTexture(cttxt, NULL, NULL, &tw, &th);
     SDL_Rect ccrect = { 20, 380, tw, th };
@@ -158,7 +160,7 @@ static void loadMedia()
     else
         printf("Main font loaded OK.\n");
 
-    m01 = Mix_LoadMUS("resource/wav/01.wav");
+    m01 = Mix_LoadMUS("resource/wav/NekomusumeNoKomoriuta_gameVer.wav");
     if (m01 == NULL) printf("Failed to get m01.\n");
     s00 = Mix_LoadWAV("resource/wav/aa.wav");
     if (s00 == NULL) printf("Failed to get s00.\n");
@@ -243,6 +245,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 
 	ren = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
+    printf("cat.girl (en-us) (Japan)\n");
     TTF_Init();
     loadMedia();
     prepBaseTexts();
@@ -252,6 +255,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
     // scan for the savegame, if its there, skip the begin phase
     if (!scanForSavegame())
     {
+        printf("savegame not found!\n");
         // Confirm game start, probably remove this later..
         SDL_Color white = { 255, 255, 255 };
         SDL_Surface* sgText = TTF_RenderText_Solid(mainFontSm, "No savegame found. Press Enter to begin game, or exit to quit.", white);
@@ -289,11 +293,12 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         prepIntro();
                         chatWait = false;
                         SDL_Delay(750);
-                        scene = 1;
+                        scene = 2;
                         break;
                     }
                 }
             }
+            SDL_Delay(16.666f);
         }
     }
     else scene = 1;
@@ -331,16 +336,14 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
         switch (scene)
         {
             case 0:
-                printf("Savegame scene issue? Not aborting...\n");
+                printf("Savegame scene issue? Exiting...\n");
+                return -1;
                 break;
             case 1:
-                if (framecounter == 0) {
-                    updatePres("At Home", const_cast<char*>(pres_str.c_str()));
-                    framecounter = 1800;
-                }
-                else
+                if (first)
                 {
-                    framecounter--;
+                    updatePres("At Home", gameTitle);
+                    first = false;
                 }
                 drawGUIbase();
                 drawBaseText();
@@ -358,7 +361,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                             Mix_VolumeMusic(i);
                             SDL_Delay(16.666f);
                         }
-                        updatePres("At the Adoption Center", "Picking a catgirl...");
+                        updatePres("At the Adoption Center", "No Catgirl Yet");
                         first = false;
                     }
                 }

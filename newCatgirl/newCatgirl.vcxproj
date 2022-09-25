@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>D:\_newCodesies\_FORPATH\SDL2_mixer-2.6.1\include;D:\_newCodesies\_FORPATH\SDL2_ttf-2.0.18\include;D:\_newCodesies\_FORPATH\SDL2-VC\include;D:\_newCodesies\_FORPATH\discord_game_sdk\cpp;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\_FORPATH\SDL2_mixer-2.6.1\lib\x64;C:\_FORPATH\SDL2_ttf-2.0.18\lib\x64;"D:\_newCodesies\_FORPATH\discord_game_sdk\lib\x86_64\";C:\_FORPATH\SDL2-VC\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\_newCodesies\_FORPATH\SDL2_mixer-2.6.1\lib\x64;D:\_newCodesies\_FORPATH\SDL2_ttf-2.0.18\lib\x64;D:\_newCodesies\_FORPATH\discord_game_sdk\lib\x86_64\;D:\_newCodesies\_FORPATH\SDL2-VC\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
