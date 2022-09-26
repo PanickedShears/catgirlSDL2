@@ -16,6 +16,9 @@
     <Filter Include="Source Files\discordGameSDK">
       <UniqueIdentifier>{aeaa1065-65d2-4392-9696-90ced6252a33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\storyElements">
+      <UniqueIdentifier>{02adb563-2f6b-4fcd-98c4-2c71db7dc24d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="catgirl.cpp">
@@ -88,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="discordintegration.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="chapter1.hpp">
+      <Filter>Source Files\storyElements</Filter>
+    </ClInclude>
+    <ClInclude Include="story.h">
+      <Filter>Source Files\storyElements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

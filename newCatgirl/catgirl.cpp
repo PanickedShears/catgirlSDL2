@@ -6,6 +6,8 @@
 // i know how to make it not use half your cpu, so
 // if it ain't broke, dont fix it
 
+// by okawaffles・2022
+
 #include "catgirl.h"
 #include <SDL.h>
 #include <stdio.h>
@@ -18,6 +20,7 @@
 // Scene headers
 #include "scene_intro.h"
 #include "discordintegration.h"
+#include "story.h"
 
 
 // important SDL variables
@@ -66,6 +69,7 @@ std::string pres_str = "Loading...";
 std::ostringstream pres_strstm;
 int framecounter = 0;
 
+int locale = 0;
 
 void mousePress(SDL_MouseButtonEvent& b)
 {
@@ -232,6 +236,23 @@ static void drawBaseText()
     SDL_RenderCopy(ren, titleTextTx, NULL, &ttrect);
 }
 
+static void scrollChat(const char* local_chatChara, const char* local_chatContents)
+{
+    chatContents = local_chatContents;
+    chatChara = local_chatChara;
+    displayedChat = "";
+    for (int i = 0; i < chatContents.size(); i++)
+    {
+        displayedChat += chatContents[i];
+        Mix_PlayChannel(-1, s00, 0);
+        drawTextBox();
+        SDL_Delay(32.222f);
+        SDL_RenderPresent(ren);
+        SDL_RenderClear(ren);
+    }
+    drawTextBox();
+}
+
 int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
 {
     if (scanForSavegame()) //load savefile
@@ -245,6 +266,8 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
         hap = GetPrivateProfileIntA("catgirl", "hap", 100, path);
         hun = GetPrivateProfileIntA("catgirl", "hun", 25, path);
         love = GetPrivateProfileIntA("catgirl", "love", 1, path);
+
+        scene = GetPrivateProfileIntA("story", "chapter", 0, path);
     }
 
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -314,10 +337,6 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
             }
             SDL_Delay(16.666f);
         }
-    }
-    else
-    {
-        scene = 1;
     }
 
 
@@ -414,7 +433,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         }
                         Mix_HaltMusic();
                         Mix_VolumeMusic(100);
-                        scene = 1;
+                        scene = 3;
                         first = false;
                         SDL_Rect fs = { 0, 0, 640, 480 };
                         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
@@ -423,28 +442,37 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                         SDL_Delay(750);
 
                         // save game
-                        saveGame(hap, hun, love, 2, 0);
-                        displayedChat = "";
-                        chatContents = "The game has been saved.";
-                        chatChara = "cat.girl";
-                        for (int i = 0; i < chatContents.size(); i++)
-                        {
-                            displayedChat += chatContents[i];
-                            Mix_PlayChannel(-1, s00, 0);
-                            drawTextBox();
+                        saveGame(hap, hun, love, 3, 0);
+                        
+                        scrollChat("cat.girl", "The game has been saved.");
 
-                            SDL_Delay(32.222f); // limit to ~30fps
+                        SDL_Delay(3000);
 
-                            SDL_RenderPresent(ren); // important, wont show unless this is here
-                            SDL_RenderClear(ren);
-                        }
-                        drawTextBox();
+                        scrollChat("cat.girl", "You can press [S] to save at any time.");
+                        
                         SDL_Delay(3000);
                         updatePres("Chapter 1", "Chloe");
+                        chatId = 0;
                     }
                 }
                 drawTextBox();
                 break;
+
+            case 3:
+                if (!chatWait)
+                {
+                    if (chatId != 16)
+                    {
+                        chatId++;
+                        scrollChat("Ch1StoryCharaList[chatId].c_str()", "Ch1StoryCharaList[chatId].c_str()");
+                        
+                        chatWait = true;
+                    }
+                }
+                chatWait = true;
+                drawTextBox();
+                break;
+
             default:
                 printf("SCENE INVALID!\n");
                 end = true;

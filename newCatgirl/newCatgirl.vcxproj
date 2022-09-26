@@ -154,9 +154,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catgirl.h" />
+    <ClInclude Include="chapter1.hpp" />
     <ClInclude Include="discordintegration.h" />
     <ClInclude Include="init_sgm.h" />
     <ClInclude Include="scene_intro.h" />
+    <ClInclude Include="story.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
