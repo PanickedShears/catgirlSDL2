@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
+#include <vector>
 
 
-std::string Ch1StoryTextContents[128] = {
+std::vector<std::string> Ch1StoryTextContents{
 	"Chloe was a bit sleepy, so you carry her out to your car, making sure not to wake her."
 };
 
-std::string Ch1StoryCharaList[128] = {
+std::vector<std::string> Ch1StoryCharaList{
 	" "
 };

@@ -464,7 +464,7 @@ int catgirl_start(SDL_Window* window, SDL_Surface* screenSurface)
                     if (chatId != 16)
                     {
                         chatId++;
-                        scrollChat("Ch1StoryCharaList[chatId].c_str()", "Ch1StoryCharaList[chatId].c_str()");
+                        scrollChat(Ch1StoryCharaList[0].c_str(), Ch1StoryCharaList[0].c_str());
                         
                         chatWait = true;
                     }
